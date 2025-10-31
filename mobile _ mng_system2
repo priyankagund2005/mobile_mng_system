@@ -1,0 +1,17 @@
+
+
+import com.mobile_shop.model.Mobile;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface MobileRepository extends JpaRepository<Mobile, Long> {
+    
+    // Custom method to easily check stock for a specific model
+    List<Mobile> findByModelNameAndStatus(String modelName, String status);
+
+    // Custom method to search by IMEI (essential for a shop)
+    Mobile findByImei(String imei);
+}
