@@ -1,0 +1,43 @@
+
+package com.mobile_shop.controller;
+
+import com.mobile_shop.model.Mobile;
+import com.mobile_shop.service.MobileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/mobiles")
+@CrossOrigin(origins = "http://localhost:3000") // IMPORTANT: Allow frontend on port 3000 (React default)
+public class MobileController {
+
+    @Autowired
+    private MobileService mobileService;
+
+    // GET: http://localhost:8080/api/mobiles
+    @GetMapping
+    public List<Mobile> getAllMobiles() {
+        return mobileService.getAllMobiles();
+    }
+
+    // POST: http://localhost:8080/api/mobiles
+    @PostMapping
+    public ResponseEntity<Mobile> addMobile(@RequestBody Mobile mobile) {
+        Mobile newMobile = mobileService.saveMobile(mobile);
+        return new ResponseEntity<>(newMobile, HttpStatus.CREATED);
+    }
+    
+    // PUT: http://localhost:8080/api/mobiles/sell/123456789012345
+    @PutMapping("/sell/{imei}")
+    public ResponseEntity<Mobile> sellMobile(@PathVariable String imei) {
+        try {
+            Mobile soldMobile = mobileService.updateMobileStatusToSold(imei);
+            return ResponseEntity.ok(soldMobile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+}
