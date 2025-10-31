@@ -1,0 +1,38 @@
+
+package com.mobile_shop.model;
+
+import jakarta.persistence.*;
+import lombok.Data; // Use Lombok for cleaner code (optional but recommended)
+
+@Entity
+@Table(name = "mobiles")
+@Data
+public class Mobile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String brand;
+    
+    @Column(nullable = false)
+    private String modelName;
+
+    @Column(nullable = false)
+    private String imei; // Unique Identifier for each physical phone
+
+    private String color;
+    
+    @Column(nullable = false)
+    private Double purchasePrice;
+
+    @Column(nullable = false)
+    private Double sellingPrice;
+
+    private Integer stockQuantity; // Total quantity in stock (for this model)
+
+    private String status = "Available"; // e.g., Available, Sold, Under Repair
+
+   
+}
