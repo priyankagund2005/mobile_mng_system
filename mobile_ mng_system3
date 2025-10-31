@@ -1,0 +1,36 @@
+
+package com.mobile_shop.service;
+
+import com.mobile_shop.model.Mobile;
+import com.mobile_shop.repository.MobileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class MobileService {
+
+    @Autowired
+    private MobileRepository mobileRepository;
+
+    public List<Mobile> getAllMobiles() {
+        return mobileRepository.findAll();
+    }
+
+    public Mobile saveMobile(Mobile mobile) {
+        return mobileRepository.save(mobile);
+    }
+
+    public Mobile updateMobileStatusToSold(String imei) {
+        Mobile mobile = mobileRepository.findByImei(imei);
+        if (mobile != null && mobile.getStatus().equals("Available")) {
+            mobile.setStatus("Sold");
+            // Decrement the stock quantity of the related model (more complex logic for a real system)
+            return mobileRepository.save(mobile);
+        }
+        throw new RuntimeException("Mobile not found or not available for sale.");
+    }
+
+    // Other methods: getMobileById, deleteMobile, searchByBrand, etc.
+}
